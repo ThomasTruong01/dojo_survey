@@ -19,7 +19,7 @@ def process():
     print('*'*50)
     print(request.form)
     print('*'*50)
-    is_valid = False		# assume True
+    is_valid = True
     if len(request.form['name']) < 1:
         is_valid = False
         flash("Please enter in your name")
@@ -37,18 +37,27 @@ def process():
 
     if is_valid:
         mySql = connectToMySQL('dojo_survey')
-        query = 'INSERT INTO surveys (name, location, language, comments, created_on, updated_on) ' +\
-            'VALUES(%(na)s, %(loc)d, %(lang)d, %(com)s, now(), now())'
-        data = {'na': request.form['name'],
-                'loc':  request.form['location'],
-                'lang': request.form['language'],
-                'com': request.form['comments']
-                }
+        query = 'INSERT INTO surveys (name, location_id, language_id, comments, created_on, updated_on) VALUES(%(na)s, %(loc)s, %(lang)s, %(com)s, now(), now())'
+        data = {'na': request.form['name'], 'loc':  request.form['location'],
+                'lang': request.form['language'], 'com': request.form['comments']}
         mySql.query_db(query, data)
         flash("Sucess! Your survey was recorded.")
         return redirect('/results')
     else:
         return redirect('/')
+
+
+@app.route('/results')
+def results():
+    mySql = connectToMySQL('dojo_survey')
+    query = 'SELECT surveys.name as "name", locations.name as "location", languages.name as "language", comments FROM surveys ' +\
+        'LEFT JOIN locations ON surveys.location_id = locations.id ' +\
+        'LEFT JOIN languages ON surveys.language_id = languages.id ' +\
+        'ORDER BY surveys.id DESC ' +\
+        'LIMIT 1'
+    results = mySql.query_db(query)
+    print(results)
+    return render_template('results.html', results=results[0])
 
 
 if __name__ == '__main__':

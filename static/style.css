@@ -1,3 +1,21 @@
+body {
+	padding: 10px;
+}
 .container {
-	margin: auto;
+	margin: 15px;
+}
+form {
+	border: 1px solid black;
+	padding: 20px;
+}
+.err {
+	color: red;
+}
+
+table {
+	/* border: 1px solid black; */
+	padding-bottom: 20px;
+}
+button {
+	margin: 20px;
 }

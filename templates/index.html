@@ -38,12 +38,10 @@
 			<form action="process" method="post">
 				{% with messages = get_flashed_messages() %} {% if messages %} {% for
 				message in messages %}
-				<p>{{ message }}</p>
+				<p class="err">{{ message }}</p>
 				{% endfor %} {% endif %} {% endwith %}
 				<div class="form-group">
-					<label for="name"
-						>Your Name <span>{{ errName }}</span></label
-					>
+					<label for="name">Your Name</label>
 					<input
 						type="text"
 						class="form-control"
